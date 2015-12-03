@@ -80,12 +80,25 @@ convertListToUnorderedList(list_of_items)
 
 ###Question 4 - List 2-3 attacks that web applications are vulnerable to. How do these attacks work? How can we prevent those attacks?
 ```
-SQL Injections 
-Cross site attacks
-SQL Injections are very dangerous because it can allow people to hack a programs database. An attacker will add extra quotes and try to break queries and attain
-information. To prevent these attacks the use of Stored Procedures are encouraged. 
-Cross site attacks is when someone tries to hijack your site by injecting javascript or some other type of client-side scripting language into your application.  
-Like SQL injections, the best way to prevent this attack is to sanitize any input that your application were to get from users.
+1. SQL Injections 
+2. Cross site attacks
+SQL Injections are very dangerous because it can allow people to hack a programs database. The SQL injection can enable an attacker to read sensitive data from the database, modify database information, and execute administration operations on the database.  An attacker will add extra quotes or comments and try to break queries and attain information.
+An example of a SQL injection is 
+SELECT * FROM items 
+	WHERE owner = 'hacker'
+	AND itemname = 'name';
+
+	DELETE FROM items;
+
+	--'
+The -- can comment other things out; negating/commenting out everything that comes after it.
+
+To prevent these attacks the use of Stored Procedures are encouraged because input can be controlled, however, it doesn't protect against every sql injection. Escaping can also be used to prevent sql injections. 
+
+Cross site attacks is a type of code injection where malicious scripts are injected into usually trusted web sites. These attacks can take place anywhere a web application uses input from a user. 
+The attacker can use a client side programming language and embed it into an otherwise normally safe website. By using XSS the attacker can get information from an unsuspecting user. Typically the malicious code will pop up asking for input and the user will input their information. The attacker can get cookie information, session tokens, and other sensitive information.
+There are many different alternatives to prevent cross site attacks, but one option is to use a library that is designed for the job. In python, you can sanitize html code before adding it to your website. Another option is to use HTML escape and Javascript escape. 
+
 ```
 
 ###Question 5 - Here is some starter code for a Flask Web Application. Expand on that and include a route that simulates rolling two dice and returns the result in JSON. You should include a brief explanation of your code.
@@ -95,25 +108,22 @@ app = Flask(__name__)
 
 import json
 import random
-
+#need to import this in order to return json as a result
+import jsonify
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
-    
+
+#description: rolldice() - will simulate the rolling of dice and return the result in json    
 @app.route('/rolldice')
 def rolldice():
 	create 2 random dice
-	#min is 1 and max is 6, but put as 7 otherwise you will never get a 6
-	dice1 = int(random.randInt(1, 7))
-	dice2 = int(random.randInt(1, 7))
+	#min is 1 and max is 6
+	dice1 = random.randInt(1, 6)
+	dice2 = random.randInt(1, 6)
 	
-	#create an array to store the results of the dice roll
-	dice_results = []
-	dice_results.append("Dice 1 Roll: " + dice1)
-	dice_results.append("Dice 2 Roll: " + dice2)
-	
-    return jsonify(dice_results)
+    return jsonify(Dice_Roll_1=dice1, Dice_Roll_2=dice2)
 
 if __name__ == '__main__':
     app.debug = True
